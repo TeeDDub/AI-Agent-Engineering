@@ -1,0 +1,50 @@
+Instruction:
+저는 유제품이 들어 있지 않고 사과 맛이 포함된 칩스 버라이어티 팩을 찾고 있으며, 가격은 30달러 미만이어야 합니다.
+
+[Search]
+
+Action: search[dairy free and apple variety pack of chips]
+Observation:
+[검색 결과로 돌아가기]
+페이지 1 (총 결과: 50)
+[다음 >]
+[B07HRFJWP8]
+Enjoy Life Foods Soft Baked Ovals, Breakfast Bars, Nut Free Bars, Soy Free, Dairy Free, Non GMO, Gluten Free, Vegan, Variety Pack, 4 Boxes (20 Bars Total)
+$100.0
+[B01KMHY5PG]
+Enjoy Life Soft Baked Chewy Bars, Variety Pack, Nut Free Bars, Soy Free, Dairy Free, Gluten Free, 6 Boxes (30 Total Bars)
+$21.49
+[B008D2X8C4]
+Enjoy Life Lentil Chips Variety Pack, Dairy Free Chips, Soy Free, Nut Free, Non GMO, Vegan, Gluten Free, 24 Bags (0.8 oz)
+$100.0
+
+Action: think[앞의 두 상품은 제가 원하는 것이 아닙니다. 세 번째 상품이 제가 찾는, 유제품이 들어 있지 않고 사과 맛이 포함된 칩스 버라이어티 팩입니다.]
+Observation: 알겠습니다.
+
+Action: click[B008D2X8C4]
+Observation:
+[검색 결과로 돌아가기]
+[< 이전]
+flavor name [dill and sour cream][garlic & parmesan][light sea salt][margherita pizza][thai chili lime][variety pack]
+size [0.8 ounce (pack of 24)][4 ounce (pack of 12)]
+가격(Price): $100.0
+평점(Rating): N.A.
+[Description]
+[Features]
+[Reviews]
+[Buy Now]
+
+Action: think[이 상품에는 'variety pack'과 '0.8 ounce (pack of 24)' 옵션이 있고, 구매하기에 좋아 보입니다.]
+Observation: 알겠습니다.
+
+Action: click[variety pack]
+Observation: variety pack을 클릭하셨습니다.
+
+Action: click[0.8 ounce (pack of 24)]
+Observation: 0.8 ounce (pack of 24)를 클릭하셨습니다.
+
+Action: click[Buy Now]
+
+STATUS: FAIL
+
+
