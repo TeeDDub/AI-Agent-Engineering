@@ -16,7 +16,7 @@ mcp_client = MultiServerMCPClient(
     {
         "math": {
             "command": "python3",
-            "args": ["ch04/mcp/MCP_math_server.py"],
+            "args": ["ch04/mcp_servers/MCP_math_server.py"],
             "transport": "stdio",
         },
         "weather": {
