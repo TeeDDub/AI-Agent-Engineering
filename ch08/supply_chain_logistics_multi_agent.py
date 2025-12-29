@@ -169,17 +169,18 @@ def supervisor_node(state: AgentState):
     operation = state.get("operation", {})
     operation_json = json.dumps(operation, ensure_ascii=False)
     
-    supervisor_prompt = (
-        "당신은 공급망 전문가 팀을 조정하는 슈퍼바이저입니다.\n"
-        "팀원:\n"
-        "- inventory: 재고 수준, 예측, 품질, 창고 최적화, 확장 및 비용을 처리합니다.\n"
-        "- transportation: 배송 추적, 준비, 운영 조정, 특수 처리, 반품, 배송 최적화 및 중단을 처리합니다.\n"
-        "- supplier: 공급업체 평가 및 규정 준수를 처리합니다.\n"
-        "\n"
-        "사용자 쿼리를 기반으로 처리할 팀원 한 명을 선택하세요.\n"
-        "선택한 팀원의 이름(inventory, transportation 또는 supplier)만 출력하고 다른 것은 출력하지 마세요.\n\n"
-        f"작업: {operation_json}"
-    )
+    supervisor_prompt = f"""
+        당신은 공급망 전문가 팀을 조정하는 슈퍼바이저입니다.
+        팀원:
+        - inventory: 재고 수준, 예측, 품질, 창고 최적화, 확장 및 비용을 처리합니다.
+        - transportation: 배송 추적, 준비, 운영 조정, 특수 처리, 반품, 배송 최적화 및 중단을 처리합니다.
+        - supplier: 공급업체 평가 및 규정 준수를 처리합니다.
+
+        사용자 쿼리를 기반으로 처리할 팀원 한 명을 선택하세요.
+        선택한 팀원의 이름(inventory, transportation 또는 supplier)만 출력하고 다른 것은 출력하지 마세요.
+
+        작업: {operation_json}
+    """
 
     full = [SystemMessage(content=supervisor_prompt)] + history
     response = llm.invoke(full)
@@ -216,38 +217,38 @@ def specialist_node(state: AgentState, specialist_llm, system_prompt: str):
 
 # 재고 전문가 노드
 def inventory_node(state: AgentState):
-    inventory_prompt = (
-        "당신은 재고 및 창고 관리 전문가입니다.\n"
-        "관리할 때:\n"
-        "  1) 재고/창고 과제를 분석합니다\n"
-        "  2) 적절한 도구를 호출합니다\n"
-        "  3) send_logistics_response로 후속 조치합니다\n"
-        "비용, 효율성 및 확장성을 고려하세요."
-    )
+    inventory_prompt = """
+        당신은 재고 및 창고 관리 전문가입니다.
+        관리할 때:
+          1) 재고/창고 과제를 분석합니다
+          2) 적절한 도구를 호출합니다
+          3) send_logistics_response로 후속 조치합니다
+        비용, 효율성 및 확장성을 고려하세요.
+    """
     return specialist_node(state, inventory_llm, inventory_prompt)
 
 # 운송 전문가 노드
 def transportation_node(state: AgentState):
-    transportation_prompt = (
-        "당신은 운송 및 물류 전문가입니다.\n"
-        "관리할 때:\n"
-        "  1) 배송/전달 과제를 분석합니다\n"
-        "  2) 적절한 도구를 호출합니다\n"
-        "  3) send_logistics_response로 후속 조치합니다\n"
-        "효율성, 지속가능성 및 위험 완화를 고려하세요."
-    )
+    transportation_prompt = """
+        당신은 운송 및 물류 전문가입니다.
+        관리할 때:
+          1) 배송/전달 과제를 분석합니다
+          2) 적절한 도구를 호출합니다
+          3) send_logistics_response로 후속 조치합니다
+        효율성, 지속가능성 및 위험 완화를 고려하세요.
+    """
     return specialist_node(state, transportation_llm, transportation_prompt)
 
 # 공급업체 전문가 노드
 def supplier_node(state: AgentState):
-    supplier_prompt = (
-        "당신은 공급업체 관계 및 규정 준수 전문가입니다.\n"
-        "관리할 때:\n"
-        "  1) 공급업체/규정 준수 문제를 분석합니다\n"
-        "  2) 적절한 도구를 호출합니다\n"
-        "  3) send_logistics_response로 후속 조치합니다\n"
-        "성과, 규정 및 관계를 고려하세요."
-    )
+    supplier_prompt = """
+        당신은 공급업체 관계 및 규정 준수 전문가입니다.
+        관리할 때:
+          1) 공급업체/규정 준수 문제를 분석합니다
+          2) 적절한 도구를 호출합니다
+          3) send_logistics_response로 후속 조치합니다
+        성과, 규정 및 관계를 고려하세요.
+    """
     return specialist_node(state, supplier_llm, supplier_prompt)
 
 # 조건부 엣지를 위한 라우팅 함수
