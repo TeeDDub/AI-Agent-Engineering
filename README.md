@@ -1,6 +1,13 @@
-# Building Applications with AI Agents
+# AI 에이전트 엔지니어링
 
-"Building Applications with AI Agents" 도서의 예시 코드 저장소입니다.
+한빛미디어에서 출간된 \[AI 에이전트 엔지니어링](원제: Building Applications with AI Agents)의 예시 코드 저장소입니다.
+
+## 예시 코드
+
+이 책의 예제 코드는 깃허브에서 다운로드 할 수 있습니다. 한국어판 예제 코드는 업데이트를 반영하여 Python 3.12와 LangChain 1.0 환경에 맞게 수정하고, 장별로 정리했습니다. 예제에서 사용하는 일부 의존성의 특성상 윈도에서는 WSL 환경에서 실행하실 것을 권장합니다. 원서의 코드는 `/src`와 `/tests` 디렉터리에서 찾을 수 있습니다.
+
+- 한국어판 저장소: https://github.com/TeeDDub/AI-Agent-Engineering
+- 원서 저장소: https://github.com/michaelalbada/BuildingApplicationsWithAIAgents
 
 ## 환경 설정
 
