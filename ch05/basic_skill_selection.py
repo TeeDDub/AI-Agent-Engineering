@@ -27,9 +27,7 @@ def query_wolfram_alpha(expression: str) -> str:
     Returns: str: 계산 결과 또는 조회된 정보입니다.
         """
 
-    api_url = f'''https://api.wolframalpha.com/v1/result?
-        i={requests.utils.quote(expression)}&
-        appid=YOUR_WOLFRAM_ALPHA_APP_ID'''  
+    api_url = f'''https://api.wolframalpha.com/v1/result?i={requests.utils.quote(expression)}&appid={os.getenv("WOLFRAM_ALPHA_APP_ID")}'''  
 
     try:
         response = requests.get(api_url)
@@ -91,9 +89,10 @@ def send_slack_message(channel: str, message: str) -> str:
         raise ValueError(f'''Slack 채널 "{channel}"로 메시지 전송에 실패했습니다: {e}''')
 
 # LLM 초기화
-llm = init_chat_model(model="gpt-5-mini", temperature=0)
-llm_with_tools = llm.bind_tools([ 
-    send_slack_message, query_wolfram_alpha, trigger_zapier_webhook])
+llm = init_chat_model(model="gpt-4o-mini", temperature=0)
+tools_list = [send_slack_message, query_wolfram_alpha, trigger_zapier_webhook]
+tools_by_name = {t.name: t for t in tools_list}
+llm_with_tools = llm.bind_tools(tools_list)
 
 messages = [HumanMessage("3.15 * 12.25는 얼마인가요?")]
 
@@ -101,7 +100,17 @@ ai_msg = llm_with_tools.invoke(messages)
 messages.append(ai_msg)
 
 for tool_call in ai_msg.tool_calls:
-   tool_msg = query_wolfram_alpha.invoke(tool_call)
+    chosen_tool = tools_by_name[tool_call["name"]]
+    result = chosen_tool.invoke(tool_call["args"])
+    tool_msg = ToolMessage(
+        content=result if isinstance(result, str) else str(result),
+        tool_call_id=tool_call["id"],
+    )
+    print(chosen_tool.name)
+    print(tool_call["args"])
+    print(tool_msg.content)
+    messages.append(tool_msg)
+    print()
 
 final_response = llm_with_tools.invoke(messages)
 print(final_response.content)
