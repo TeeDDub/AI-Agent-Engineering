@@ -1,6 +1,14 @@
 # AI 에이전트 엔지니어링
 
+<img src=cover.png width=300px>
+
 한빛미디어에서 출간된 \[AI 에이전트 엔지니어링](원제: Building Applications with AI Agents)의 예시 코드 저장소입니다.
+
+구매 링크
+- 교보문고: https://product.kyobobook.co.kr/detail/S000219002818
+- Yes24: https://www.yes24.com/product/goods/174018513
+- 알라딘: https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=384025599&start=pbook
+- 리디: https://ridibooks.com/books/6071001294
 
 ## 예시 코드
 
