@@ -2,6 +2,7 @@ from typing import Annotated
 from typing_extensions import TypedDict
 
 from langchain.chat_models import init_chat_model
+from langchain_core.messages import SystemMessage
 from langgraph.graph import StateGraph, MessagesState, START
 
 # 환경변수 확인
@@ -22,7 +23,9 @@ if not os.getenv("OPENAI_API_KEY"):
 llm = init_chat_model(model="gpt-5-mini", temperature=0)
 
 def call_model(state: MessagesState):
-    response = llm.invoke(state["messages"])
+    context = "\n\n".join([r.get("text", "") for r in results])
+    messages = [SystemMessage(content="참고:\n" + context)] + list(state["messages"])
+    response = llm.invoke(messages)
     return {"messages": response}
 
 
@@ -65,8 +68,8 @@ builder.add_node("call_model", call_model)
 builder.add_edge(START, "call_model")
 graph = builder.compile()
 
-input_message = {"type": "user", "content": "안녕하세요! 제 이름은 민혁입니다."}
+input_message = {"type": "user", "content": "AI와 머신러닝은 어떤 관계가 있나요?"}
 for chunk in graph.stream({"messages": [input_message]}, {}, stream_mode="values"):
     chunk["messages"][-1].pretty_print()
 
-print(results)
+
