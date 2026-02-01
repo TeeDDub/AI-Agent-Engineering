@@ -117,7 +117,7 @@ graph_builder.add_conditional_edges(
     {"performance": "handle_performance", "login_end": "summarize_response"}
 )
 
-
+graph = graph_builder.compile()
 
 # 3. 그래프 실행
 if __name__ == "__main__":
