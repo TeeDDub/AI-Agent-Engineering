@@ -32,14 +32,6 @@ builder.add_node("call_model", call_model)
 builder.add_edge(START, "call_model")
 graph = builder.compile()
 
-# 메모리가 없어서 대화 상태를 유지할 수 없음
-input_message = {"type": "user", "content": "안녕하세요! 제 이름은 민혁입니다."}
-for chunk in graph.stream({"messages": [input_message]}, stream_mode="values"):
-    chunk["messages"][-1].pretty_print()
-
-input_message = {"type": "user", "content": "제 이름이 뭐라고 했죠?"}
-for chunk in graph.stream({"messages": [input_message]}, stream_mode="values"):
-    chunk["messages"][-1].pretty_print()
 
 from langgraph.checkpoint.memory import MemorySaver
 
@@ -52,3 +44,6 @@ input_message = {"type": "user", "content": "안녕하세요! 제 이름은 민�
 for chunk in graph.stream({"messages": [input_message]}, config, stream_mode="values"):
     chunk["messages"][-1].pretty_print()
 
+input_message = {"type": "user", "content": "제 이름이 뭐라고 했죠?"}
+for chunk in graph.stream({"messages": [input_message]}, config, stream_mode="values"):
+    chunk["messages"][-1].pretty_print()
