@@ -117,6 +117,13 @@ graph_builder.add_conditional_edges(
     {"performance": "handle_performance", "login_end": "summarize_response"}
 )
 
+# handle_refund, handle_performance 실행 후 요약으로 수렴
+graph_builder.add_edge("handle_refund", "summarize_response")
+graph_builder.add_edge("handle_performance", "summarize_response")
+
+# 최종 노드에서 그래프 종료
+graph_builder.add_edge("summarize_response", END)
+
 graph = graph_builder.compile()
 
 # 3. 그래프 실행
