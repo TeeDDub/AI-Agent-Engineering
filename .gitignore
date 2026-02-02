@@ -93,6 +93,8 @@ dmypy.json
 *.hdf5
 secrets.txt
 ch08/adas/results/
+ragtest/
+
 
 # uv
 .python-version
