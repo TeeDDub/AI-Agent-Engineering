@@ -33,6 +33,14 @@ dev = [
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
 ]
+fine-tuning = [
+    "datasets>=2.14.0",
+    "transformers>=4.36.0",
+    "peft>=0.7.0",
+    "trl>=0.7.0",
+    "torch>=2.0.0",
+    "bitsandbytes>=0.41.0",
+]
 
 [build-system]
 requires = ["hatchling"]
