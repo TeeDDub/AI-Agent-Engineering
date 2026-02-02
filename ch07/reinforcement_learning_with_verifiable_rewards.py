@@ -1,15 +1,35 @@
-from datasets import load_dataset
-from trl import GRPOTrainer, GRPOConfig
-import torch
-import re
+"""RLVR(Reinforcement Learning with Verifiable Rewards) - GRPO로 도구 호출 품질 학습."""
 import json
-from typing import List, Dict, Any
+import logging
+import os
+import re
+from typing import Any, Dict, List
 
-# RLVR(Reinforcement Learning with Verifiable Rewards) 훈련 데이터 경로
-DPO_DATA = "ch07/training_data/rlvr_it_help_desk_training_data.jsonl"
+import torch
+from datasets import load_dataset
+from huggingface_hub import constants as hf_constants
+from trl import GRPOConfig, GRPOTrainer
+
+# RLVR 훈련 데이터 경로 (prompt, chosen, rejected, label 컬럼 필요)
+RLVR_DATA = "ch07/training_data/rlvr_it_help_desk_training_data.jsonl"
+
+
+def _is_model_cached(repo_id: str) -> bool:
+    """Hugging Face 모델이 로컬 캐시에 있는지 확인"""
+    if os.path.exists(repo_id) and os.path.isdir(repo_id):
+        return True
+    cache_folder = "models--" + repo_id.replace("/", "--")
+    cache_path = os.path.join(hf_constants.HF_HUB_CACHE, cache_folder)
+    return os.path.exists(cache_path)
+
+
+GRPO_MODEL = "Qwen/Qwen2-0.5B-Instruct"
+logger = logging.getLogger(__name__)
+if not _is_model_cached(GRPO_MODEL):
+    logger.warning("로컬 경로를 찾을 수 없습니다. Hub에서 '%s'를 다운로드합니다.", GRPO_MODEL)
 
 # 데이터셋 로드
-dataset = load_dataset("json", data_files=DPO_DATA, split="train")
+dataset = load_dataset("json", data_files=RLVR_DATA, split="train")
 
 def reward_tool_call_quality(completions: List[str], **kwargs) -> List[float]:
     """
@@ -171,7 +191,7 @@ grpo_config = GRPOConfig(
 
 # GRPO(Group Relative Policy Optimization) 트레이너 설정
 trainer = GRPOTrainer(
-    model="Qwen/Qwen2-0.5B-Instruct",
+    model=GRPO_MODEL,
     reward_funcs=combined_reward,
     train_dataset=dataset,
     args=grpo_config,

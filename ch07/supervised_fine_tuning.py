@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import platform
 from enum import Enum
 from functools import partial
 from pathlib import Path
@@ -115,16 +116,21 @@ def build_tokenizer(model_name: str):
 
 
 def build_model(model_name: str, tokenizer, load_4bit: bool = False):
+    """모델 로드. Mac에서는 bitsandbytes가 불안정하므로 4bit 양자화 비활성화."""
     kwargs = {
-        "attn_implementation": "eager",
+        "attn_implementation": "eager",  # flash_attn 호환성 (Phi-3 window_size 등)
         "device_map": "auto",
+        "torch_dtype": torch.bfloat16,
     }
-    kwargs["quantization_config"] = BitsAndBytesConfig(
-        load_in_4bit=True,
-        bnb_4bit_compute_dtype=torch.bfloat16,
-        bnb_4bit_quant_type="nf4",
-        bnb_4bit_use_double_quant=True,
-    )
+    # load_4bit=True이고 Mac이 아닐 때만 4bit 양자화 사용 (bitsandbytes는 Mac에서 불안정)
+    use_4bit = load_4bit and platform.system() != "Darwin"
+    if use_4bit:
+        kwargs["quantization_config"] = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_compute_dtype=torch.bfloat16,
+            bnb_4bit_quant_type="nf4",
+            bnb_4bit_use_double_quant=True,
+        )
     model = AutoModelForCausalLM.from_pretrained(model_name, **kwargs)
     model.resize_token_embeddings(len(tokenizer))
     return model
@@ -199,6 +205,7 @@ def train(
 
     trainer.train()
     trainer.save_model()
+    tokenizer.save_pretrained(output_dir)
     return trainer
 
 ###############################################################################

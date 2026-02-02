@@ -92,6 +92,7 @@ dmypy.json
 *.h5
 *.hdf5
 secrets.txt
+ch07/fine_tuned_model/
 ch08/adas/results/
 ragtest/
 

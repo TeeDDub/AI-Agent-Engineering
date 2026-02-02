@@ -10,6 +10,41 @@
 *   `supervised_fine_tuning.py`: 지도 학습(Supervised Fine-Tuning, SFT)을 통해 모델을 특정 작업에 맞게 미세 조정하는 예제입니다.
 *   `direct_preference_optimization.py`: DPO(Direct Preference Optimization)를 사용하여 인간의 선호도에 맞춰 모델을 최적화하는 예제입니다.
 *   `reinforcement_learning_with_verifiable_rewards.py`: 검증 가능한 보상(Verifiable Rewards)을 기반으로 강화 학습(RL)을 수행하여 에이전트의 도구 사용 및 형식 준수 능력을 향상시키는 예제입니다.
+*   `test_dpo_model.py`: DPO로 파인튜닝한 Phi-3 헬프데스크 모델을 테스트하는 스크립트입니다.
+*   `test_sft_model.py`: SFT로 파인튜닝한 함수 호출 모델을 테스트하는 스크립트입니다.
+*   `test_rlvr_model.py`: RLVR로 파인튜닝한 Qwen2 헬프데스크 모델을 테스트하는 스크립트입니다.
+
+## 파인튜닝 모델 테스트
+
+### DPO 모델
+
+`direct_preference_optimization.py`로 학습한 모델은 `ch07/fine_tuned_model/phi3-mini-helpdesk-dpo/`에 저장됩니다.
+
+```bash
+python ch07/test_dpo_model.py
+python ch07/test_dpo_model.py --prompt "비밀번호를 잊어버렸습니다"
+python ch07/test_dpo_model.py --prompt "VPN 연결이 끊깁니다" --max-tokens 512
+```
+
+### SFT 모델 (함수 호출)
+
+`supervised_fine_tuning.py`로 학습한 모델은 `ch07/fine_tuned_model/gemma-2-2B-function-call-ft/`에 저장됩니다.
+
+```bash
+python ch07/test_sft_model.py
+python ch07/test_sft_model.py --prompt "오늘 날씨가 어때?"
+python ch07/test_sft_model.py --adapter ch07/fine_tuned_model/gemma-2-2B-function-call-ft
+```
+
+### RLVR 모델
+
+`reinforcement_learning_with_verifiable_rewards.py`로 학습한 모델은 `ch07/fine_tuned_model/qwen-helpdesk-rlvr/`에 저장됩니다.
+
+```bash
+python ch07/test_rlvr_model.py
+python ch07/test_rlvr_model.py --prompt "비밀번호를 잊어버렸습니다"
+python ch07/test_rlvr_model.py --model-path ch07/fine_tuned_model/qwen-helpdesk-rlvr/checkpoint-XXX
+```
 
 ## 실행 방법
 
