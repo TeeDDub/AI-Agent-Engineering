@@ -141,3 +141,4 @@ agent.show_insights()
 reflection_prompt = (
     "승격된 인사이트를 바탕으로, 다음 분기에 실행할 수 있는 하나의 고영향 실험을 제안하세요:" + f"\n{agent.promoted_insights}"
 )
+agent.reflect(reflection_prompt)  # 기존에 정의된 메서드를 직접 호출
